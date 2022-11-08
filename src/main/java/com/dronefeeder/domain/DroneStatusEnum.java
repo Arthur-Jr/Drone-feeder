@@ -1,5 +1,8 @@
 package com.dronefeeder.domain;
 
+/**
+ * Drone enum status.
+ */
 public enum DroneStatusEnum {
   NONE(0), PARADO(1), ENTREGANDO(2);
 
