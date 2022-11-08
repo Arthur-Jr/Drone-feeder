@@ -1,6 +1,7 @@
 package com.dronefeeder.model;
 
 import com.dronefeeder.domain.DroneStatusEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
  * Drone Entity.
  */
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Drone {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
