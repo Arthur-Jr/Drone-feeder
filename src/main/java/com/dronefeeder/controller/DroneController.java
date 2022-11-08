@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,4 +40,9 @@ public class DroneController {
     return this.service.getAllDrones();
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Drone> deleteDrone(@PathVariable("id") Long id) {
+    this.service.deleteDrone(id);
+    return ResponseEntity.status(HttpStatus.OK).body(null);
+  }
 }

@@ -47,7 +47,22 @@ public class DroneService {
     return this.repo.getReferenceById(id);
   }
 
+
+  /**
+   * Lista todos drones.
+   */
   public List<Drone> getAllDrones() {
     return this.repo.findAll();
+  }
+
+  /**
+   * Remove um drone pelo id.
+   */
+  public void deleteDrone(Long id) {
+    if (!this.repo.existsById(id)) {
+      throw new DroneNotFountException();
+    }
+
+    this.repo.deleteById(id);
   }
 }
