@@ -33,4 +33,14 @@ public class AdviceManager {
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
+
+  /**
+   * Internal server erro handler.
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<DataError> handleGenericError(Exception e) {
+    DataError errorResponse = new DataError("Internal server error");
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+  }
 }
