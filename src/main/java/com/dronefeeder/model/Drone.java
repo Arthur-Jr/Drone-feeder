@@ -2,6 +2,7 @@ package com.dronefeeder.model;
 
 import com.dronefeeder.domain.DroneStatusEnum;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,8 +26,10 @@ public class Drone {
 
   private LocalDateTime created;
 
+  @Column(columnDefinition = "Decimal(9,6)")
   private double lon;
 
+  @Column(columnDefinition = "Decimal(8,6)")
   private double lat;
 
   public Long getId() {
