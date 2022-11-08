@@ -16,7 +16,14 @@ public enum DroneStatusEnum {
     return id;
   }
 
+  /**
+   * Get value by index.
+   */
   public static DroneStatusEnum valueOf(int index) {
-    return (DroneStatusEnum) DroneStatusEnum.values()[index];
+    try {
+      return (DroneStatusEnum) DroneStatusEnum.values()[index];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      return DroneStatusEnum.values()[0];
+    }
   }
 }
