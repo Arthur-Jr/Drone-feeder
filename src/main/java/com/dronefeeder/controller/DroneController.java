@@ -4,6 +4,8 @@ import com.dronefeeder.dto.DroneDto;
 import com.dronefeeder.model.Drone;
 import com.dronefeeder.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,8 @@ public class DroneController {
   private DroneService service;
 
   @PostMapping
-  public Drone addDrone(@RequestBody DroneDto drone) {
-    return this.service.addDrone(drone);
+  public ResponseEntity<Drone> addDrone(@RequestBody DroneDto drone) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.service.addDrone(drone));
   }
 
 }

@@ -30,7 +30,7 @@ public class DroneService {
     newDrone.setLastConnection(date);
     newDrone.setStatus(DroneStatusEnum.PARADO);
 
-    return this.repo.saveAndFlush(newDrone);
+    return this.repo.save(newDrone);
 
   }
 }
