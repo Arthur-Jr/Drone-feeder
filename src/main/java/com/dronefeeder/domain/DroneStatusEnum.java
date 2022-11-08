@@ -15,4 +15,8 @@ public enum DroneStatusEnum {
   public int getId() {
     return id;
   }
+
+  public static DroneStatusEnum valueOf(int index) {
+    return (DroneStatusEnum) DroneStatusEnum.values()[index];
+  }
 }
