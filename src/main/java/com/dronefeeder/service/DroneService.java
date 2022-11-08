@@ -6,6 +6,7 @@ import com.dronefeeder.excepetion.DroneNotFountException;
 import com.dronefeeder.model.Drone;
 import com.dronefeeder.repository.DroneRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,9 @@ public class DroneService {
     }
 
     return this.repo.getReferenceById(id);
+  }
+
+  public List<Drone> getAllDrones() {
+    return this.repo.findAll();
   }
 }
