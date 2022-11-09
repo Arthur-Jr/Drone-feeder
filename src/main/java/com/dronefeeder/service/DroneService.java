@@ -2,6 +2,7 @@ package com.dronefeeder.service;
 
 import com.dronefeeder.domain.DroneStatusEnum;
 import com.dronefeeder.dto.DroneDto;
+import com.dronefeeder.dto.DroneUpdateDto;
 import com.dronefeeder.excepetion.DroneNotFountException;
 import com.dronefeeder.model.Drone;
 import com.dronefeeder.repository.DroneRepository;
@@ -64,5 +65,25 @@ public class DroneService {
     }
 
     this.repo.deleteById(id);
+  }
+
+  /**
+   * Drone edit.
+   */
+  public Drone editDrone(Long id, DroneUpdateDto dronePayload) {
+    Drone droneToUpdate = this.getDroneById(id);
+    if (dronePayload.getLat() != 0.0) {
+      droneToUpdate.setLat(dronePayload.getLat());
+    }
+
+    if (dronePayload.getLon() != 0.0) {
+      droneToUpdate.setLon(dronePayload.getLon());
+    }
+
+    if (dronePayload.getLon() != 0) {
+      droneToUpdate.setStatus(DroneStatusEnum.valueOf(dronePayload.getStatus()));
+    }
+
+    return this.repo.save(droneToUpdate);
   }
 }
