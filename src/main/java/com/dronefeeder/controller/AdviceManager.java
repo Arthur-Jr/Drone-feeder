@@ -31,7 +31,7 @@ public class AdviceManager {
   public ResponseEntity<DataError> handleNotFoundDrone(Exception e) {
     DataError errorResponse = new DataError(e.getMessage());
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 
   /**
