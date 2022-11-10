@@ -1,0 +1,89 @@
+package com.dronefeeder.service;
+
+import com.dronefeeder.domain.DroneStatusEnum;
+import com.dronefeeder.dto.DroneDto;
+import com.dronefeeder.dto.DroneUpdateDto;
+import com.dronefeeder.excepetion.DroneNotFountException;
+import com.dronefeeder.model.Drone;
+import com.dronefeeder.repository.DroneRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * Drone service.
+ */
+@Service
+public class DroneService {
+
+  @Autowired
+  private DroneRepository repo;
+
+  /**
+   * Adiciona drone no DB.
+   */
+  public Drone addDrone(DroneDto dronePayload) {
+    Drone newDrone = new Drone();
+    LocalDateTime date = LocalDateTime.now().withNano(0);
+
+    newDrone.setLat(dronePayload.getLat());
+    newDrone.setLon(dronePayload.getLon());
+    newDrone.setCreated(date);
+    newDrone.setLastConnection(date);
+    newDrone.setStatus(DroneStatusEnum.PARADO);
+
+    return this.repo.save(newDrone);
+
+  }
+
+  /**
+   * Acessa um drone pelo id.
+   */
+  public Drone getDroneById(Long id) {
+    if (!this.repo.existsById(id)) {
+      throw new DroneNotFountException();
+    }
+
+    return this.repo.getReferenceById(id);
+  }
+
+
+  /**
+   * Lista todos drones.
+   */
+  public List<Drone> getAllDrones() {
+    return this.repo.findAll();
+  }
+
+  /**
+   * Remove um drone pelo id.
+   */
+  public void deleteDrone(Long id) {
+    if (!this.repo.existsById(id)) {
+      throw new DroneNotFountException();
+    }
+
+    this.repo.deleteById(id);
+  }
+
+  /**
+   * Drone edit.
+   */
+  public Drone editDrone(Long id, DroneUpdateDto dronePayload) {
+    Drone droneToUpdate = this.getDroneById(id);
+    if (dronePayload.getLat() != 0.0) {
+      droneToUpdate.setLat(dronePayload.getLat());
+    }
+
+    if (dronePayload.getLon() != 0.0) {
+      droneToUpdate.setLon(dronePayload.getLon());
+    }
+
+    if (dronePayload.getStatus() != 0) {
+      droneToUpdate.setStatus(DroneStatusEnum.valueOf(dronePayload.getStatus()));
+    }
+
+    return this.repo.save(droneToUpdate);
+  }
+}

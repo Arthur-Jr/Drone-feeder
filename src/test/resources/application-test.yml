@@ -3,11 +3,11 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/drone_feeder?createDatabaseIfNotExist=true
+    url: jdbc:mysql://127.0.0.1:3306/drone_feeder_test?createDatabaseIfNotExist=true
     username: root
     password: root
     
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create-drop
     generate-ddl: true
     show-sql: true

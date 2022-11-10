@@ -6,47 +6,64 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.dronefeeder.dto.DroneDto;
+import com.dronefeeder.dto.DroneUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Testes da rota de drone.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DroneRouteTests {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Test
+  @Order(1)
   @DisplayName("Testa a adição de um novo drone")
-  void deveRetornarOIdDoDroneAdicionado() throws Exception {
-    mockMvc.perform(post("/drone")).andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id").value(1));
+  void deveRetornarIdDoDroneAdicionado() throws Exception {
+    DroneDto body = new DroneDto();
+
+    mockMvc
+        .perform(post("/drone").contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(body)))
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(1));
   }
 
   @Test
+  @Order(2)
   @DisplayName("Testa a busca de drone por id existente")
   void deveRetornarDroneCorrespondenteAoId() throws Exception {
     mockMvc.perform(get("/drone/1")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.lat").value(0)).andExpect(jsonPath("$.lon").value(0))
-        .andExpect(jsonPath("$.status").value("parado"));
+        .andExpect(jsonPath("$.status").value("PARADO"));
   }
 
   @Test
+  @Order(3)
   @DisplayName("Testa a busca de drone por id inexistente")
   void buscaPorIdInexistente() throws Exception {
     mockMvc.perform(get("/drone/5")).andExpect(status().isNotFound())
-        .andExpect(jsonPath("$.mensagem").value("Drone Inexistente"));
+        .andExpect(jsonPath("$.message").value("Drone Inexistente"));
   }
 
   @Test
+  @Order(4)
   @DisplayName("Testa a busca de todos drones")
   void buscaPorTodosDrone() throws Exception {
     mockMvc.perform(get("/drone")).andExpect(status().isOk())
@@ -54,24 +71,27 @@ public class DroneRouteTests {
   }
 
   @Test
+  @Order(5)
   @DisplayName("Testa a edição de drone")
   void editaDrone() throws Exception {
-    Map<String, String> body = new HashMap<>();
-    body.put("status", "entregando");
+    DroneUpdateDto body = new DroneUpdateDto();
+    body.setStatus(2);
 
     mockMvc
-        .perform(put("/drone").contentType(MediaType.APPLICATION_JSON)
+        .perform(put("/drone/1").contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(body)))
-        .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("entregando"));
+        .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("ENTREGANDO"));
   }
 
   @Test
+  @Order(6)
   @DisplayName("Testa a remoção de drone existente")
   void removeDrone() throws Exception {
     mockMvc.perform(delete("/drone/1")).andExpect(status().isOk());
   }
 
   @Test
+  @Order(7)
   @DisplayName("Testa a remoção de drone ineexistente")
   void removeDroneInexistente() throws Exception {
     mockMvc.perform(delete("/drone/1")).andExpect(status().isNotFound());
