@@ -80,7 +80,7 @@ public class DroneService {
       droneToUpdate.setLon(dronePayload.getLon());
     }
 
-    if (dronePayload.getLon() != 0) {
+    if (dronePayload.getStatus() != 0) {
       droneToUpdate.setStatus(DroneStatusEnum.valueOf(dronePayload.getStatus()));
     }
 
