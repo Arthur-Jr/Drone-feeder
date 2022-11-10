@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/drone_feeder?createDatabaseIfNotExist=true
-    username: root
-    password: root
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/drone_feeder?createDatabaseIfNotExist=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
     
   jpa:
     hibernate.ddl-auto: update
