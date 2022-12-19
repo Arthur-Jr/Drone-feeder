@@ -30,6 +30,8 @@ public class Entrega {
 
   private LocalDateTime deliveryDate;
 
+  private String address;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "droneId")
   private Drone droneId;
@@ -72,5 +74,13 @@ public class Entrega {
 
   public void setDroneId(Drone droneId) {
     this.droneId = droneId;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 }
