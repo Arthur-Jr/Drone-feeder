@@ -9,5 +9,5 @@ import com.dronefeeder.model.Entrega;
 @Repository
 public interface EntregaResository extends JpaRepository<Entrega, Long> {
 
-  List<Entrega> findByDroneId(Drone droneId);
+  List<Entrega> findByDrone(Drone drone);
 }
