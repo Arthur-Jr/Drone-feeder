@@ -2,7 +2,6 @@ package com.dronefeeder.model;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,7 @@ public class Entrega {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated
   private EntregaStatusEnum status;
 
   private LocalDateTime created;
@@ -33,8 +32,8 @@ public class Entrega {
   private String address;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "droneId")
-  private Drone droneId;
+  @JoinColumn(name = "drone_id")
+  private Drone drone;
 
   public Long getId() {
     return id;
@@ -68,12 +67,12 @@ public class Entrega {
     this.deliveryDate = deliveryDate;
   }
 
-  public Drone getDroneId() {
-    return droneId;
+  public Drone getDrone() {
+    return drone;
   }
 
-  public void setDroneId(Drone droneId) {
-    this.droneId = droneId;
+  public void setDrone(Drone droneId) {
+    this.drone = droneId;
   }
 
   public String getAddress() {

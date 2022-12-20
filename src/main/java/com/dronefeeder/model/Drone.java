@@ -1,8 +1,9 @@
 package com.dronefeeder.model;
 
-import com.dronefeeder.domain.DroneStatusEnum;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import com.dronefeeder.domain.DroneStatusEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Drone Entity.
@@ -33,6 +37,9 @@ public class Drone {
 
   @Column(columnDefinition = "Decimal(8,6)")
   private double lat;
+
+  @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Entrega> entregas = new ArrayList<>();
 
   public Long getId() {
     return id;
