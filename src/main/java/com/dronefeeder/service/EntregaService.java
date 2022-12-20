@@ -28,14 +28,14 @@ public class EntregaService {
     newDelivery.setAddress(payload.getAddress());
     newDelivery.setCreated(date);
     newDelivery.setDeliveryDate(date.plusMinutes(10));
-    newDelivery.setDroneId(drone);
+    newDelivery.setDrone(drone);
 
     if (drone.getStatus() == DroneStatusEnum.PARADO) {
-      newDelivery.setStatus(EntregaStatusEnum.EV);
+      newDelivery.setStatus(EntregaStatusEnum.EM_VIAGEM);
       drone.setStatus(DroneStatusEnum.ENTREGANDO);
       this.droneRepo.save(drone);
     } else {
-      newDelivery.setStatus(EntregaStatusEnum.EP);
+      newDelivery.setStatus(EntregaStatusEnum.EM_ESPERA);
     }
 
     return repo.save(newDelivery);
@@ -43,7 +43,7 @@ public class EntregaService {
 
   public List<Entrega> getAllEntregaByDroneId(Long droneId) {
     Drone drone = this.droneRepo.getReferenceById(droneId);
-    return this.repo.findByDroneId(drone);
+    return this.repo.findByDrone(drone);
   }
 
   private Drone getDroneToDelivery() {
@@ -55,6 +55,17 @@ public class EntregaService {
       return avaibleDrone;
     }
 
-    return droneList.get(0);
+    Drone droneWithLessEntrega = droneList.get(0);
+    int count = this.getAllEntregaByDroneId(droneList.get(0).getId()).size();
+    for (Drone d : droneList) {
+      List<Entrega> entregas = this.getAllEntregaByDroneId(d.getId());
+
+      if (entregas.size() < count) {
+        count = entregas.size();
+        droneWithLessEntrega = d;
+      }
+    }
+
+    return droneWithLessEntrega;
   }
 }
