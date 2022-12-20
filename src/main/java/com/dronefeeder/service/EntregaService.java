@@ -32,11 +32,18 @@ public class EntregaService {
 
     if (drone.getStatus() == DroneStatusEnum.PARADO) {
       newDelivery.setStatus(EntregaStatusEnum.EV);
+      drone.setStatus(DroneStatusEnum.ENTREGANDO);
+      this.droneRepo.save(drone);
     } else {
       newDelivery.setStatus(EntregaStatusEnum.EP);
     }
 
     return repo.save(newDelivery);
+  }
+
+  public List<Entrega> getAllEntregaByDroneId(Long droneId) {
+    Drone drone = this.droneRepo.getReferenceById(droneId);
+    return this.repo.findByDroneId(drone);
   }
 
   private Drone getDroneToDelivery() {
