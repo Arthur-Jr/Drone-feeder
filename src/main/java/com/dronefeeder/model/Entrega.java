@@ -29,6 +29,8 @@ public class Entrega {
 
   private LocalDateTime deliveryDate;
 
+  private LocalDateTime deliveryStartTime;
+
   private String address;
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -81,5 +83,13 @@ public class Entrega {
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public LocalDateTime getDeliveryStartTime() {
+    return deliveryStartTime;
+  }
+
+  public void setDeliveryStartTime(LocalDateTime deliveryStartTime) {
+    this.deliveryStartTime = deliveryStartTime;
   }
 }

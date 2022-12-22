@@ -27,11 +27,13 @@ public class EntregaService {
 
     newDelivery.setAddress(payload.getAddress());
     newDelivery.setCreated(date);
-    newDelivery.setDeliveryDate(date.plusMinutes(10));
     newDelivery.setDrone(drone);
 
     if (drone.getStatus() == DroneStatusEnum.PARADO) {
       newDelivery.setStatus(EntregaStatusEnum.EM_VIAGEM);
+      newDelivery.setDeliveryStartTime(date);
+      newDelivery.setDeliveryDate(date.plusMinutes(10));
+
       drone.setStatus(DroneStatusEnum.ENTREGANDO);
       this.droneRepo.save(drone);
     } else {
