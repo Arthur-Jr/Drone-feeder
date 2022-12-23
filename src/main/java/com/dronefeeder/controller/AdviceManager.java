@@ -1,12 +1,13 @@
 package com.dronefeeder.controller;
 
-import com.dronefeeder.excepetion.DataError;
-import com.dronefeeder.excepetion.DroneNotFountException;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.dronefeeder.excepetion.DataError;
+import com.dronefeeder.excepetion.DroneNotFountException;
+import com.dronefeeder.excepetion.EntregaNotFound;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 /**
  * Advice manager.
@@ -27,7 +28,7 @@ public class AdviceManager {
   /**
    * Not found drone error handler.
    */
-  @ExceptionHandler(DroneNotFountException.class)
+  @ExceptionHandler({DroneNotFountException.class, EntregaNotFound.class})
   public ResponseEntity<DataError> handleNotFoundDrone(Exception e) {
     DataError errorResponse = new DataError(e.getMessage());
 
