@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.dronefeeder.domain.DroneStatusEnum;
 import com.dronefeeder.domain.EntregaStatusEnum;
 import com.dronefeeder.dto.EntregaDto;
+import com.dronefeeder.excepetion.EntregaNotFound;
 import com.dronefeeder.model.Drone;
 import com.dronefeeder.model.Entrega;
 import com.dronefeeder.repository.DroneRepository;
@@ -41,6 +42,14 @@ public class EntregaService {
     }
 
     return repo.save(newDelivery);
+  }
+
+  public Entrega getEntregaById(Long id) {
+    if (!this.repo.existsById(id)) {
+      throw new EntregaNotFound();
+    }
+
+    return this.repo.getReferenceById(id);
   }
 
   public List<Entrega> getAllEntregaByDroneId(Long droneId) {

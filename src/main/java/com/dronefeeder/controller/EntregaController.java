@@ -25,8 +25,13 @@ public class EntregaController {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.service.addEntrega(entrega));
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/list/{id}")
   public List<Entrega> getEntregaByDroneId(@PathVariable("id") Long id) {
     return this.service.getAllEntregaByDroneId(id);
+  }
+
+  @GetMapping("/{id}")
+  public Entrega getEntregaById(@PathVariable("id") Long id) {
+    return this.service.getEntregaById(id);
   }
 }
