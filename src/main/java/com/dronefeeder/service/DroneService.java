@@ -1,15 +1,18 @@
 package com.dronefeeder.service;
 
-import com.dronefeeder.domain.DroneStatusEnum;
-import com.dronefeeder.dto.DroneDto;
-import com.dronefeeder.dto.DroneUpdateDto;
-import com.dronefeeder.excepetion.DroneNotFountException;
-import com.dronefeeder.model.Drone;
-import com.dronefeeder.repository.DroneRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.dronefeeder.domain.DroneStatusEnum;
+import com.dronefeeder.domain.EntregaStatusEnum;
+import com.dronefeeder.dto.DroneDto;
+import com.dronefeeder.dto.DroneUpdateDto;
+import com.dronefeeder.excepetion.DroneNotFountException;
+import com.dronefeeder.model.Drone;
+import com.dronefeeder.model.Entrega;
+import com.dronefeeder.repository.DroneRepository;
+import com.dronefeeder.repository.EntregaResository;
 
 /**
  * Drone service.
@@ -19,6 +22,9 @@ public class DroneService {
 
   @Autowired
   private DroneRepository repo;
+
+  @Autowired
+  private EntregaResository entregaRepo;
 
   /**
    * Adiciona drone no DB.
@@ -34,7 +40,6 @@ public class DroneService {
     newDrone.setStatus(DroneStatusEnum.PARADO);
 
     return this.repo.save(newDrone);
-
   }
 
   /**
@@ -44,8 +49,11 @@ public class DroneService {
     if (!this.repo.existsById(id)) {
       throw new DroneNotFountException();
     }
+    Drone drone = this.repo.getReferenceById(id);
 
-    return this.repo.getReferenceById(id);
+    this.checkDroneCurrentDelivery(drone);
+
+    return drone;
   }
 
 
@@ -85,5 +93,34 @@ public class DroneService {
     }
 
     return this.repo.save(droneToUpdate);
+  }
+
+  private void checkDroneCurrentDelivery(Drone drone) {
+    LocalDateTime date = LocalDateTime.now().withNano(0);
+    List<Entrega> entregas = this.entregaRepo.findByDrone(drone);
+    Entrega currentEntrega = entregas.stream()
+        .filter(x -> x.getStatus() == EntregaStatusEnum.EM_VIAGEM).findFirst().orElse(null);
+
+    if (currentEntrega.getDeliveryDate().isBefore(date)) {
+      currentEntrega.setStatus(EntregaStatusEnum.ENTREGUE);
+      this.entregaRepo.save(currentEntrega);
+      this.updateCurrentDroneDelivery(entregas, drone);
+    }
+  }
+
+  private void updateCurrentDroneDelivery(List<Entrega> entregas, Drone drone) {
+    LocalDateTime date = LocalDateTime.now().withNano(0);
+    Entrega nextEntrega = entregas.stream()
+        .filter(x -> x.getStatus() == EntregaStatusEnum.EM_ESPERA).findFirst().orElse(null);
+
+    if (nextEntrega != null) {
+      nextEntrega.setDeliveryDate(date.plusMinutes(10));
+      nextEntrega.setDeliveryStartTime(date);
+      nextEntrega.setStatus(EntregaStatusEnum.EM_VIAGEM);
+      this.entregaRepo.save(nextEntrega);
+    } else {
+      drone.setStatus(DroneStatusEnum.PARADO);
+      this.repo.save(drone);
+    }
   }
 }
