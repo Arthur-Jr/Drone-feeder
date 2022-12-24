@@ -101,7 +101,7 @@ public class DroneService {
     Entrega currentEntrega = entregas.stream()
         .filter(x -> x.getStatus() == EntregaStatusEnum.EM_VIAGEM).findFirst().orElse(null);
 
-    if (currentEntrega.getDeliveryDate().isBefore(date)) {
+    if (currentEntrega != null && currentEntrega.getDeliveryDate().isBefore(date)) {
       currentEntrega.setStatus(EntregaStatusEnum.ENTREGUE);
       this.entregaRepo.save(currentEntrega);
       this.updateCurrentDroneDelivery(entregas, drone);
