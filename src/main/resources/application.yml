@@ -6,7 +6,7 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/drone_feeder?createDatabaseIfNotExist=true
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:root}
-    
+
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
