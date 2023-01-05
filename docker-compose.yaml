@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  backend:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    restart: on-failure
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+
+  db:
+    image: mysql
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=drone
+      - MYSQL_PASSWORD=drone
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/lib/docker/volumes/mysql/
